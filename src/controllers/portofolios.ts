@@ -94,3 +94,17 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
         return res.status(400).json({ error: 'Internal Server Error' });
     }
 }
+
+
+export const GetPortofolioById = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        const response = await query('SELECT * FROM projects where id = $1', [id])
+        
+        console.log('GetPortofolioById executed succesfully')
+        return res.status(200).json(response?.rows)
+    } catch (error) {
+        console.log('GetPortofolioById cannot be executed', error)
+        return res.status(500).json({ error: 'Internal Server Error'})
+    }
+} 
