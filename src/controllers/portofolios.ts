@@ -1,7 +1,7 @@
 import {Request, Response} from "express"
 import { initAdmin } from "../db/firebase/initialize"
 import { getImageList, uploadFileToFirebase } from "../db/firebase/firebase"
-import { query } from "../db/postgres/postgre"
+import { query } from "../db/postgres/postgres"
 import { stringToArray } from '../utils/helper'
 
 export const GetPortofolioList = async (req: Request , res: Response) => {
@@ -19,7 +19,7 @@ export const GetPortofolioList = async (req: Request , res: Response) => {
                 limit,
                 Total: Number(count) || 0
             },
-            Data: response || []
+            Data: response?.rows || []
         }
         console.log('GetPortofolioList execute succesfully')
         res.status(200).json(bodyResponse)
