@@ -3,5 +3,5 @@ import { GetPortofolioList, StorePortofolioList } from "../controllers/portofoli
 
 export default (router: Router) => {
     router.get('/portofolios', GetPortofolioList)
-    router.post('/portofolio', StorePortofolioList)
+    router.post('/portofolios', StorePortofolioList)
 }

@@ -1,9 +1,9 @@
 import firebaseAdmin from 'firebase-admin'
 
-export const getImageList = async () => {
+export const getImageList = async (project_name?: string) => {
     const storage = firebaseAdmin.storage()
     const bucket = storage.bucket();
-    const filePath = "portofolio-images"
+    const filePath = `portofolio-images/${project_name}`
     const [files] = await bucket.getFiles({
         prefix: filePath
     })
@@ -15,4 +15,20 @@ export const getImageList = async () => {
         }
     })
     return urls
+}
+
+export const uploadFileToFirebase = async (files: Express.Multer.File[], project_name: string) => {
+    const storage = firebaseAdmin.storage()
+    const bucket = storage.bucket();
+    for (const file of files) {
+        const fileName = `portofolio-images/${project_name}/${Date.now()}_${file.originalname}`
+        const fileUpload = bucket.file(fileName)
+    
+        await fileUpload.save(file.buffer, {
+            metadata: {
+                contentType: file.mimetype
+            }
+        })
+    }
+   
 }
