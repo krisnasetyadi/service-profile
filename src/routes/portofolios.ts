@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { GetPortofolioList } from "../controllers/portofolios";
+import { GetPortofolioList, StorePortofolioList } from "../controllers/portofolios";
 
 export default (router: Router) => {
     router.get('/portofolios', GetPortofolioList)
+    router.post('/portofolio', StorePortofolioList)
 }
