@@ -1,4 +1,5 @@
 import firebaseAdmin from 'firebase-admin'
+import { formattedDateNow } from '../../utils/helper';
 
 export const getImageList = async (project_name?: string) => {
     const storage = firebaseAdmin.storage()
@@ -20,8 +21,9 @@ export const getImageList = async (project_name?: string) => {
 export const uploadFileToFirebase = async (files: Express.Multer.File[], project_name: string) => {
     const storage = firebaseAdmin.storage()
     const bucket = storage.bucket();
+    
     for (const file of files) {
-        const fileName = `portofolio-images/${project_name}/${Date.now()}_${file.originalname}`
+        const fileName = `portofolio-images/${project_name}/${file.originalname}_${formattedDateNow()}`
         const fileUpload = bucket.file(fileName)
     
         await fileUpload.save(file.buffer, {

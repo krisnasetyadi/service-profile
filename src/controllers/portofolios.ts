@@ -38,9 +38,9 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
             stacks,
             other_stacks,
             links,
-            is_confidential
+            is_confidential,
         } = req.body
-    
+      
         const files = req.files as Express.Multer.File[]
         const images = files?.filter(f => f.fieldname === 'images')
         const videos = files?.filter(f => f.fieldname === 'videos')
@@ -54,10 +54,10 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
 
         if(images.length > 0) {
             await initAdmin()
-            await uploadFileToFirebase(files, project_name)
+            await uploadFileToFirebase(images, project_name)
             image_urls = await getImageList(project_name)
         }
-      
+       
         const columns = [ 
             'project_name', 'roles', 'stacks', 
             'other_stacks','links', 'project_description', 
