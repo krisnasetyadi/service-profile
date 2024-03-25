@@ -36,7 +36,7 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
             description,
             roles,
             stacks,
-            other_stacks,
+            others,
             links,
             is_confidential,
         } = req.body
@@ -60,7 +60,7 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
        
         const columns = [ 
             'project_name', 'roles', 'stacks', 
-            'other_stacks','links', 'project_description', 
+            'others','links', 'project_description', 
             'is_confidential', 'image_urls', 'video_urls'
         ]
 
@@ -71,7 +71,7 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
             project_name, 
             stringToArray(roles), 
             stringToArray(stacks), 
-            stringToArray(other_stacks), 
+            stringToArray(others), 
             stringToArray(links), 
             description, 
             is_confidential || 'N',
@@ -99,10 +99,10 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
 export const GetPortofolioById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params
-        const response = await query('SELECT * FROM projects where id = $1', [id])
+        const response = await query(`SELECT * FROM projects where id = ${id}`)
         
         console.log('GetPortofolioById executed succesfully')
-        return res.status(200).json(response?.rows)
+        return res.status(200).json({ Data: response?.rows[0] })
     } catch (error) {
         console.log('GetPortofolioById cannot be executed', error)
         return res.status(500).json({ error: 'Internal Server Error'})
