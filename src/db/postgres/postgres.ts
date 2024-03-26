@@ -9,16 +9,19 @@ const devConfig = {
     max: Infinity,
 }
 
-const railwayConfig = {
-    user: process.env.PGUSERRAILWAY,
-    database: process.env.PGDATABASERAILWAY,
-    host: process.env.PGHOSTRAILWAY,
-    password: process.env.PGPASSWORDRAILWAY,
-    port: Number(process.env.PGPORTRAILWAY),
+// const railwayConfig = {
+//     user: process.env.PGUSERRFL0,
+//     database: process.env.PGDATABASEFL0,
+//     host: process.env.PGHOSTFL0,
+//     password: process.env.PGPASSWORDFL0,
+//     port: Number(process.env.PGPORTFL0),
+// }
 
+const vercelPG = {
+    connectionString: `${process.env.VERCEL_CONNECTION_STRING}`,
 }
 
-const pool = new Pool(process.env.ENV === 'DEV' ? devConfig : railwayConfig)
+const pool = new Pool(process.env.ENV === 'DEV' ? devConfig : vercelPG)
 
 export const query = async (text: string, params?: any[]): Promise<QueryResult> => {
     const client = await pool.connect()

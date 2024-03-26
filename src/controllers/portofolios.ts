@@ -32,7 +32,7 @@ export const GetPortofolioList = async (req: Request , res: Response) => {
 export const StorePortofolioList = async(req: Request, res: Response) => {
     try {
         const {
-            project_name,
+            name,
             description,
             roles,
             stacks,
@@ -46,7 +46,7 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
         const videos = files?.filter(f => f.fieldname === 'videos')
         let image_urls= [] as string[];
 
-        const existingProject: any = await query(`SELECT * FROM projects WHERE project_name = $1 limit 1`, [project_name]) 
+        const existingProject: any = await query(`SELECT * FROM projects WHERE name = $1 limit 1`, [name]) 
        
         if(existingProject.rowCount > 0) {
             return  res.status(400).json({ error: 'Project already exist' });
@@ -54,13 +54,13 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
 
         if(images.length > 0) {
             await initAdmin()
-            await uploadFileToFirebase(images, project_name)
-            image_urls = await getImageList(project_name)
+            await uploadFileToFirebase(images, name)
+            image_urls = await getImageList(name)
         }
        
         const columns = [ 
-            'project_name', 'roles', 'stacks', 
-            'others','links', 'project_description', 
+            'name', 'roles', 'stacks', 
+            'others','links', 'description', 
             'is_confidential', 'image_urls', 'video_urls'
         ]
 
@@ -68,7 +68,7 @@ export const StorePortofolioList = async(req: Request, res: Response) => {
         VALUES ( ${columns.map((_, i) => `$${i + 1}`).join(',')} )`;
 
         const values = [ 
-            project_name, 
+            name, 
             stringToArray(roles), 
             stringToArray(stacks), 
             stringToArray(others), 
