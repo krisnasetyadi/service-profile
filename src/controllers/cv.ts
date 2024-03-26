@@ -71,12 +71,11 @@ export const DeleteCV = async(req: Request, res: Response) => {
 export const DownloadCv = async(req: Request, res: Response) => {
     if(req.method === 'GET') {
         try {
-            const queryResponse = await query(`SELECT * FROM cvfiles WHERE is_default = 'Y'`)
+            const queryResponse = await query(`SELECT * FROM cvfiles WHERE is_default = 'Y' limit 1`)
             if(queryResponse.rowCount === 0) {
                 return res.status(400).json({ error: 'Data not available' })
             } else {
                 const { name, type, content } = queryResponse.rows[0]
-                console.log('queryResponses', queryResponse.rows[0])
     
                 const headers = {
                     'Content-type': type,
