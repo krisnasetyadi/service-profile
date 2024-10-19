@@ -183,6 +183,6 @@ export const UpdatePortofolioById = async (req: Request, res: Response) => {
     return res.status(200).json(response.rows[0]);
   } catch (error) {
     console.error("Error updating project:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: error });
   }
 };
