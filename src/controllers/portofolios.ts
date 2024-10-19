@@ -161,9 +161,9 @@ export const UpdatePortofolioById = async (req: Request, res: Response) => {
     `;
 
     const values = [
-      roles,
-      stacks,
-      others,
+      stringToArray(roles),
+      stringToArray(stacks),
+      stringToArray(others),
       stringToArray(links),
       description,
       is_confidential,
