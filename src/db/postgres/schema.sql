@@ -7,7 +7,7 @@ CREATE TABLE projects (
     stacks VARCHAR(50)[] NOT NULL, 
     others VARCHAR(50)[],
     links VARCHAR(255)[],
-    description VARCHAR(255),
+    description TEXT,
     is_confidential VARCHAR(1),
     image_urls VARCHAR(255)[],
     video_urls VARCHAR(255)[],
