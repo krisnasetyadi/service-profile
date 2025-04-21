@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  DeleteTodoById,
   GetTodoById,
   GetTodoList,
   StoreTodo,
@@ -12,4 +13,5 @@ export default (router: Router) => {
   router.get("/todo/:id/", GetTodoById);
   router.post("/todo/", StoreTodo);
   router.put("/todo/:id/", UpdateTodoById);
+  router.delete("/todo/:id", DeleteTodoById);
 };
