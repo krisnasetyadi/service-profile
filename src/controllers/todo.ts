@@ -17,6 +17,16 @@ import { query } from "../db/postgres/postgres";
  *         schema:
  *           type: integer
  *         description: Number of items to retrieve
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Filter todos by title
+ *       - in: query
+ *         name: description
+ *         schema:
+ *           type: string
+ *         description: Filter todos by description
  *     responses:
  *       200:
  *         description: A list of todos
@@ -28,12 +38,44 @@ export const GetTodoList = async (req: Request, res: Response) => {
     const queryParams = req.query;
     const offset = Number(queryParams?.offset) || 0;
     const limit = Number(queryParams?.limit) || 10;
-    const totalData = await query("SELECT COUNT(id) FROM todos");
+    const titleFilter = queryParams?.title ? `%${queryParams.title}%` : null;
+    const descriptionFilter = queryParams?.description
+      ? `%${queryParams.description}%`
+      : null;
+
+    let filterQuery = "";
+    const filterValues: any[] = [];
+
+    if (titleFilter) {
+      filterQuery += "title ILIKE $1";
+      filterValues.push(titleFilter);
+    }
+
+    if (descriptionFilter) {
+      filterQuery += filterQuery ? " AND " : "";
+      filterQuery += "description ILIKE $" + (filterValues.length + 1);
+      filterValues.push(descriptionFilter);
+    }
+
+    const totalDataQuery = `
+      SELECT COUNT(id) FROM todos
+      ${filterQuery ? `WHERE ${filterQuery}` : ""}
+    `;
+    const totalData = await query(totalDataQuery, filterValues);
     const [{ count }] = totalData?.rows;
-    const response = await query("SELECT * FROM todos OFFSET $1 LIMIT $2", [
-      offset,
-      limit,
-    ]);
+
+    const dataQuery = `
+      SELECT * FROM todos
+      ${filterQuery ? `WHERE ${filterQuery}` : ""}
+      OFFSET $${filterValues.length + 1} LIMIT $${filterValues.length + 2}
+    `;
+    const response = await query(dataQuery, [...filterValues, offset, limit]);
+
+    if (response.rows.length === 0) {
+      return res.status(404).json({
+        message: "No todos found matching the given criteria",
+      });
+    }
 
     const bodyResponse = {
       Query: {
