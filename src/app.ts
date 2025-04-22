@@ -13,8 +13,18 @@ app.listen(process.env.PORT, () => {
   console.log(`server is running on port ${process.env.PORT}`);
 });
 
-// Update CORS configuration to allow specific origin
-app.use(cors({ origin: "https://service-profile.vercel.app" }));
+// Apply CORS middleware early and handle preflight requests
+app.use(
+  cors({
+    origin: ["https://service-profile.vercel.app", "*"], // Allow specific origin and wildcard
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // If cookies or credentials are needed
+  })
+);
+
+// Explicitly handle preflight requests
+app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
