@@ -9,7 +9,7 @@ import {
 } from "../controllers/todo";
 
 export default (router: Router) => {
-  router.get("/todos/", GetTodoList);
+  router.get("/todo/", GetTodoList);
   router.get("/todo/:id/", GetTodoById);
   router.post("/todo/", StoreTodo);
   router.put("/todo/:id/", UpdateTodoById);
