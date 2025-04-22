@@ -12,7 +12,10 @@ const upload = multer();
 app.listen(process.env.PORT, () => {
   console.log(`server is running on port ${process.env.PORT}`);
 });
-app.use(cors({ origin: "*" }));
+
+// Update CORS configuration to allow specific origin
+app.use(cors({ origin: "https://service-profile.vercel.app" }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(upload.any());
