@@ -16,11 +16,7 @@ app.listen(process.env.PORT, () => {
 // Apply CORS middleware early and handle preflight requests
 app.use(
   cors({
-    origin: [
-      "https://service-profile.vercel.app",
-      "http://localhost:5173",
-      "*",
-    ], // Allow specific origin and wildcard
+    origin: ["https://service-profile.vercel.app", "http://localhost:5173"], // Allow specific origin and wildcard
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // If cookies or credentials are needed
